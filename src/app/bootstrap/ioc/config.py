@@ -2,14 +2,15 @@ from amocrm.v2 import tokens
 from amocrm.v2.tokens import TokenManager
 from dishka import Provider, Scope, provide, from_context
 
-from app.bootstrap.configs import AmoCRMConfig
+from app.bootstrap.configs import AmoCRMConfig, RedisConfig
 from app.infrastructure.adapters.lead_gateway import PipelineID, StatusId
 
 
 class AppSetupProvider(Provider):
     scope = Scope.APP
 
-    database_config = from_context(AmoCRMConfig)
+    database_config = from_context(RedisConfig)
+    amo_config = from_context(AmoCRMConfig)
 
     @provide
     def setup_amo(self, config: AmoCRMConfig) -> TokenManager:

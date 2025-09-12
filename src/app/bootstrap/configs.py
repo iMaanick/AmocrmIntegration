@@ -3,52 +3,41 @@ from os import environ
 
 
 @dataclass
-class MissingDatabaseConfigError(ValueError):
-
+class MissingRedisConfigError(ValueError):
     @property
     def title(self) -> str:
-        return "Required db environment variables are missing"
+        return "Required Redis environment variables are missing"
 
 
 @dataclass(frozen=True)
-class DatabaseConfig:
+class RedisConfig:
     host: str
-    db_name: str
-    user: str
     port: int
+    username: str
     password: str
 
-    @property
-    def uri(self) -> str:
-        return (
-            f"postgresql+psycopg://{self.user}:{self.password}@{self.host}"
-            f":{self.port}/{self.db_name}"
-        )
 
-
-def load_database_config() -> DatabaseConfig:
-    host = environ.get("DB_HOST")
-    port = environ.get("POSTGRES_PORT")
-    db_name = environ.get("POSTGRES_DB")
-    user = environ.get("POSTGRES_USER")
-    password = environ.get("POSTGRES_PASSWORD")
+def load_redis_config() -> RedisConfig:
+    host = environ.get("REDIS_HOST")
+    port = environ.get("REDIS_PORT")
+    username = environ.get("REDIS_USERNAME")
+    password = environ.get("REDIS_PASSWORD")
 
     if (
             host is None
             or port is None
-            or db_name is None
-            or user is None
+            or username is None
             or password is None
     ):
-        raise MissingDatabaseConfigError
+        raise MissingRedisConfigError
 
-    return DatabaseConfig(
+    return RedisConfig(
         host=host,
         port=int(port),
-        db_name=db_name,
-        user=user,
-        password=password,
+        username=username,
+        password=password
     )
+
 
 @dataclass
 class MissingAmoCRMConfigError(ValueError):
@@ -78,13 +67,13 @@ def load_amocrm_config() -> AmoCRMConfig:
     status_id = environ.get("AMOCRM_STATUS_ID")
 
     if (
-        access_token is None
-        or client_id is None
-        or client_secret is None
-        or subdomain is None
-        or redirect_url is None
-        or pipeline_id is None
-        or status_id is None
+            access_token is None
+            or client_id is None
+            or client_secret is None
+            or subdomain is None
+            or redirect_url is None
+            or pipeline_id is None
+            or status_id is None
     ):
         raise MissingAmoCRMConfigError
 
@@ -98,14 +87,15 @@ def load_amocrm_config() -> AmoCRMConfig:
         status_id=status_id,
     )
 
+
 @dataclass(frozen=True)
 class Config:
-    database: DatabaseConfig
+    database: RedisConfig
     amocrm: AmoCRMConfig
 
 
 def load_settings() -> Config:
-    database = load_database_config()
+    database = load_redis_config()
     amocrm = load_amocrm_config()
     return Config(
         database=database,

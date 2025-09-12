@@ -19,3 +19,4 @@ __pycache__/
 /.env
 /data/
 /src/app/bootstrap/ioc/lul.py
+/redis_data/

@@ -20,7 +20,8 @@ dependencies = [
     "dishka",
     "adaptix==3.0.0b11",
     "pydantic[email]",
-    "amocrm_api"
+    "amocrm_api",
+    "redis"
 ]
 [project.optional-dependencies]
 dev = [
