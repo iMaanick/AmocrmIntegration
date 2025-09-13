@@ -14,7 +14,7 @@ class GoogleSheetsGateway(SheetsGateway):
             self,
             client: Client,
             spreadsheet_url: SpreadsheetUrl,
-            spreadsheet_name: SpreadsheetName
+            spreadsheet_name: SpreadsheetName,
     ) -> None:
         self.client = client
         self.spreadsheet_url = spreadsheet_url

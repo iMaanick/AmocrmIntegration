@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 
-from app.application.common.ports.lead_dto import LeadCreate, LeadUpdate, LeadFieldsData
+from app.application.common.ports.lead_dto import (
+    LeadCreate,
+    LeadFieldsData,
+    LeadUpdate,
+)
 
 
 class LeadGateway(ABC):

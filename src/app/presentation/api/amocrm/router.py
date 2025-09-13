@@ -1,4 +1,5 @@
 import logging
+from typing import Annotated, Any
 from urllib.parse import parse_qs
 
 from dishka import FromDishka
@@ -41,10 +42,15 @@ def upsert_lead(
 @amocrm_router.post("/lead", response_class=Response)
 @inject_sync
 def lead_changed(
-        use_case: FromDishka[LeadChangedUseCase],
-        payload=Body(),
+    use_case: FromDishka[LeadChangedUseCase],
+    payload: Annotated[Any, Body()],
 ) -> None:
-    decoded = payload.decode('utf-8', errors='replace')
-    parsed = parse_qs(decoded)
-    lead_id = int(parsed.get('leads[update][0][id]')[0])
+    raw_body: str = payload.decode("utf-8", errors="replace")
+    parsed_body = parse_qs(raw_body)
+
+    lead_id_values = parsed_body.get("leads[update][0][id]")
+    if not lead_id_values:
+        return
+
+    lead_id = int(lead_id_values[0])
     use_case(lead_id)

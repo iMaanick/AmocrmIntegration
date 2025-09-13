@@ -22,7 +22,7 @@ class InfrastructureProvider(Provider):
             port=config.port,
             username=config.username,
             password=config.password,
-            decode_responses=True
+            decode_responses=True,
         )
 
     @provide(scope=Scope.APP)
@@ -30,10 +30,10 @@ class InfrastructureProvider(Provider):
             self,
             creds_json: GoogleCreds,
     ) -> Client:
-        creds = Credentials.from_service_account_info(creds_json)
+        creds = Credentials.from_service_account_info(creds_json)  # type: ignore[no-untyped-call]
         scoped = creds.with_scopes(
             [
                 "https://www.googleapis.com/auth/spreadsheets",
-            ]
+            ],
         )
         return Client(scoped)

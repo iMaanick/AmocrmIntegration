@@ -28,11 +28,16 @@ class LeadChangedUseCase:
             return
 
         logger.info(
-            "Updating row=%s in Sheets with email=%s, amount=%s for lead_id=%s",
+            "Updating row=%s in Sheets with email=%s, amount=%s "
+            "for lead_id=%s",
             row_id,
             lead.email,
             lead.amount,
             lead_id,
         )
         self.sheets_gateway.update_lead(row_id, lead.email, lead.amount)
-        logger.info("Row=%s successfully updated for lead_id=%s", row_id, lead_id)
+        logger.info(
+            "Row=%s successfully updated for lead_id=%s",
+            row_id,
+            lead_id,
+        )

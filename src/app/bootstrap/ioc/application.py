@@ -1,10 +1,12 @@
-from dishka import Provider, Scope, provide_all, WithParents
+from dishka import Provider, Scope, WithParents, provide_all
 
 from app.application.use_cases.lead_changed import LeadChangedUseCase
 from app.application.use_cases.upsert_lead import UpsertLeadUseCase
 from app.infrastructure.adapters.google_sheets import GoogleSheetsGateway
 from app.infrastructure.adapters.lead_gateway import AMOLeadGateway
-from app.infrastructure.adapters.redis_lead_google_sheets import RedisSheetsLeadGateway
+from app.infrastructure.adapters.redis_lead_google_sheets import (
+    RedisSheetsLeadGateway,
+)
 
 
 class ApplicationProvider(Provider):

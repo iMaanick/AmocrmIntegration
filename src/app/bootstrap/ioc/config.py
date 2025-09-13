@@ -1,9 +1,17 @@
 from amocrm.v2 import tokens
 from amocrm.v2.tokens import TokenManager
-from dishka import Provider, Scope, provide, from_context
+from dishka import Provider, Scope, from_context, provide
 
-from app.bootstrap.configs import AmoCRMConfig, RedisConfig, GoogleServiceAccountConfig
-from app.infrastructure.adapters.google_sheets import GoogleCreds, SpreadsheetUrl, SpreadsheetName
+from app.bootstrap.configs import (
+    AmoCRMConfig,
+    GoogleServiceAccountConfig,
+    RedisConfig,
+)
+from app.infrastructure.adapters.google_sheets import (
+    GoogleCreds,
+    SpreadsheetName,
+    SpreadsheetUrl,
+)
 from app.infrastructure.adapters.lead_gateway import PipelineID, StatusId
 
 
@@ -38,7 +46,10 @@ class AppSetupProvider(Provider):
         return StatusId(int(config.status_id))
 
     @provide
-    def google_config_to_creds_json(self, config: GoogleServiceAccountConfig) -> GoogleCreds:
+    def google_config_to_creds_json(
+            self,
+            config: GoogleServiceAccountConfig,
+    ) -> GoogleCreds:
         return GoogleCreds({
             "type": config.type,
             "project_id": config.project_id,
@@ -54,9 +65,15 @@ class AppSetupProvider(Provider):
         })
 
     @provide
-    def setup_spreadsheet_url(self, config: GoogleServiceAccountConfig) -> SpreadsheetUrl:
+    def setup_spreadsheet_url(
+            self,
+            config: GoogleServiceAccountConfig,
+    ) -> SpreadsheetUrl:
         return SpreadsheetUrl(config.spreadsheet_url)
 
     @provide
-    def setup_spreadsheet_name(self, config: GoogleServiceAccountConfig) -> SpreadsheetName:
+    def setup_spreadsheet_name(
+            self,
+            config: GoogleServiceAccountConfig,
+    ) -> SpreadsheetName:
         return SpreadsheetName(config.spreadsheet_name)

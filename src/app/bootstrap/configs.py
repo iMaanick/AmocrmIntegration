@@ -37,7 +37,7 @@ def load_redis_config() -> RedisConfig:
         host=host,
         port=int(port),
         username=username,
-        password=password
+        password=password,
     )
 
 
@@ -98,7 +98,7 @@ class MissingGoogleServiceAccountConfigError(ValueError):
 
     @property
     def title(self) -> str:
-        return "Required GoogleServiceAccount environment variables are missing"
+        return "Required ServiceAccount environment variables are missing"
 
 
 @dataclass(frozen=True)
@@ -127,17 +127,27 @@ def load_google_service_account_config() -> GoogleServiceAccountConfig:
     client_id = environ.get("GOOGLE_CLIENT_ID")
     auth_uri = environ.get("GOOGLE_AUTH_URI")
     token_uri = environ.get("GOOGLE_TOKEN_URI")
-    auth_provider_x509_cert_url = environ.get("GOOGLE_AUTH_PROVIDER_X509_CERT_URL")
+    auth_prov_x509_cert_url = environ.get("GOOGLE_AUTH_PROVIDER_X509_CERT_URL")
     client_x509_cert_url = environ.get("GOOGLE_CLIENT_X509_CERT_URL")
     universe_domain = environ.get("GOOGLE_UNIVERSE_DOMAIN")
     spreadsheet_url = environ.get("GOOGLE_SPREADSHEET_URL")
     spreadsheet_name = environ.get("GOOGLE_SPREADSHEET_NAME")
 
-    if not all([
-        type_, project_id, private_key_id, private_key, client_email, client_id,
-        auth_uri, token_uri, auth_provider_x509_cert_url, client_x509_cert_url, universe_domain, spreadsheet_url,
-        spreadsheet_name
-    ]):
+    if (
+            type_ is None
+            or project_id is None
+            or private_key_id is None
+            or private_key is None
+            or client_email is None
+            or client_id is None
+            or auth_uri is None
+            or token_uri is None
+            or auth_prov_x509_cert_url is None
+            or client_x509_cert_url is None
+            or universe_domain is None
+            or spreadsheet_url is None
+            or spreadsheet_name is None
+    ):
         raise MissingGoogleServiceAccountConfigError
 
     return GoogleServiceAccountConfig(
@@ -149,11 +159,11 @@ def load_google_service_account_config() -> GoogleServiceAccountConfig:
         client_id=client_id,
         auth_uri=auth_uri,
         token_uri=token_uri,
-        auth_provider_x509_cert_url=auth_provider_x509_cert_url,
+        auth_provider_x509_cert_url=auth_prov_x509_cert_url,
         client_x509_cert_url=client_x509_cert_url,
         universe_domain=universe_domain,
         spreadsheet_url=spreadsheet_url,
-        spreadsheet_name=spreadsheet_name
+        spreadsheet_name=spreadsheet_name,
     )
 
 
@@ -171,5 +181,5 @@ def load_settings() -> Config:
     return Config(
         database=database,
         amocrm=amocrm,
-        google_service_account=google_service_account
+        google_service_account=google_service_account,
     )

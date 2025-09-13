@@ -30,13 +30,17 @@ class UpsertLeadUseCase:
     def __call__(self, request_data: UpsertLeadRequest) -> UpsertLeadResponse:
         lead_id = self.sheets_lead_gateway.get_lead(request_data.row)
         if lead_id is not None:
-            logger.info("Lead exists for row %s: lead_id=%s", request_data.row, lead_id)
+            logger.info(
+                "Lead exists for row %s: lead_id=%s",
+                request_data.row,
+                lead_id,
+            )
             self.lead_gateway.update(
                 lead_id=lead_id,
                 data=LeadUpdate(
                     email=request_data.email,
                     amount=request_data.amount,
-                )
+                ),
 
             )
             logger.info("Lead with lead_id=%s updated", lead_id)
@@ -48,7 +52,7 @@ class UpsertLeadUseCase:
                     row=request_data.row,
                     email=request_data.email,
                     amount=request_data.amount,
-                )
+                ),
             )
             logger.info("Lead with lead_id=%s created", lead_id)
             self.sheets_lead_gateway.set_lead(request_data.row, lead_id)

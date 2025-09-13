@@ -1,21 +1,25 @@
-from typing import NewType
+from typing import NewType, cast
 
 from amocrm.v2 import Contact, Lead, fields
 from amocrm.v2.entity import custom_field
 
-from app.application.common.ports.lead_dto import LeadCreate, LeadUpdate, LeadFieldsData
+from app.application.common.ports.lead_dto import (
+    LeadCreate,
+    LeadFieldsData,
+    LeadUpdate,
+)
 from app.application.common.ports.lead_gateway import LeadGateway
 
 
 class MyContact(Contact):
-    email = custom_field.ContactEmailField("Email раб.")
+    email = custom_field.ContactEmailField("Email раб.")  # noqa: RUF001
 
 
 class MyLead(Lead):
-    contacts = fields._EmbeddedLinkListField("contacts", model="MyContact")
+    contacts = fields._EmbeddedLinkListField("contacts", model="MyContact") # noqa: SLF001
 
 
-PipelineID = NewType("PipelineId", int)
+PipelineID = NewType("PipelineID", int)
 StatusId = NewType("StatusId", int)
 
 
@@ -33,11 +37,11 @@ class AMOLeadGateway(LeadGateway):
         new_lead.create()
 
         contact = MyContact(
-            email=lead.email
+            email=lead.email,
         )
         contact.save()
         new_lead.contacts.add(contact)
-        return new_lead.id
+        return cast(int, new_lead.id)
 
     def update(self, lead_id: int, data: LeadUpdate) -> None:
         lead: MyLead = MyLead.objects.get(lead_id)
@@ -53,4 +57,3 @@ class AMOLeadGateway(LeadGateway):
             email=list(lead.contacts)[-1].email,
             amount=lead.price,
         )
-
