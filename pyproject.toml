@@ -21,7 +21,9 @@ dependencies = [
     "adaptix==3.0.0b11",
     "pydantic[email]",
     "amocrm_api",
-    "redis"
+    "redis",
+    "python-multipart",
+    "gspread"
 ]
 [project.optional-dependencies]
 dev = [

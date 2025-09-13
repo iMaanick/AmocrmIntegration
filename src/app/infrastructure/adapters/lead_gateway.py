@@ -3,7 +3,7 @@ from typing import NewType
 from amocrm.v2 import Contact, Lead, fields
 from amocrm.v2.entity import custom_field
 
-from app.application.common.ports.lead_dto import LeadCreate, LeadUpdate
+from app.application.common.ports.lead_dto import LeadCreate, LeadUpdate, LeadFieldsData
 from app.application.common.ports.lead_gateway import LeadGateway
 
 
@@ -46,3 +46,11 @@ class AMOLeadGateway(LeadGateway):
         c.save()
         lead.price = data.amount
         lead.save()
+
+    def get(self, lead_id: int) -> LeadFieldsData:
+        lead: MyLead = MyLead.objects.get(lead_id)
+        return LeadFieldsData(
+            email=list(lead.contacts)[-1].email,
+            amount=lead.price,
+        )
+

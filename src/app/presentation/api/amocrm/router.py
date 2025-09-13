@@ -1,9 +1,12 @@
 import logging
+from urllib.parse import parse_qs
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject_sync
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
+from starlette.responses import Response
 
+from app.application.use_cases.lead_changed import LeadChangedUseCase
 from app.application.use_cases.upsert_lead import (
     UpsertLeadRequest,
     UpsertLeadResponse,
@@ -33,3 +36,15 @@ def upsert_lead(
         response.id,
     )
     return response
+
+
+@amocrm_router.post("/lead", response_class=Response)
+@inject_sync
+def lead_changed(
+        use_case: FromDishka[LeadChangedUseCase],
+        payload=Body(),
+) -> None:
+    decoded = payload.decode('utf-8', errors='replace')
+    parsed = parse_qs(decoded)
+    lead_id = int(parsed.get('leads[update][0][id]')[0])
+    use_case(lead_id)

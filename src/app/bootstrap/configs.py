@@ -92,16 +92,84 @@ def load_amocrm_config() -> AmoCRMConfig:
     )
 
 
+class MissingGoogleServiceAccountConfigError(ValueError):
+    def __init__(self) -> None:
+        super().__init__(self.title)
+
+    @property
+    def title(self) -> str:
+        return "Required GoogleServiceAccount environment variables are missing"
+
+
+@dataclass(frozen=True)
+class GoogleServiceAccountConfig:
+    type: str
+    project_id: str
+    private_key_id: str
+    private_key: str
+    client_email: str
+    client_id: str
+    auth_uri: str
+    token_uri: str
+    auth_provider_x509_cert_url: str
+    client_x509_cert_url: str
+    universe_domain: str
+    spreadsheet_url: str
+    spreadsheet_name: str
+
+
+def load_google_service_account_config() -> GoogleServiceAccountConfig:
+    type_ = environ.get("GOOGLE_TYPE")
+    project_id = environ.get("GOOGLE_PROJECT_ID")
+    private_key_id = environ.get("GOOGLE_PRIVATE_KEY_ID")
+    private_key = environ.get("GOOGLE_PRIVATE_KEY")
+    client_email = environ.get("GOOGLE_CLIENT_EMAIL")
+    client_id = environ.get("GOOGLE_CLIENT_ID")
+    auth_uri = environ.get("GOOGLE_AUTH_URI")
+    token_uri = environ.get("GOOGLE_TOKEN_URI")
+    auth_provider_x509_cert_url = environ.get("GOOGLE_AUTH_PROVIDER_X509_CERT_URL")
+    client_x509_cert_url = environ.get("GOOGLE_CLIENT_X509_CERT_URL")
+    universe_domain = environ.get("GOOGLE_UNIVERSE_DOMAIN")
+    spreadsheet_url = environ.get("GOOGLE_SPREADSHEET_URL")
+    spreadsheet_name = environ.get("GOOGLE_SPREADSHEET_NAME")
+
+    if not all([
+        type_, project_id, private_key_id, private_key, client_email, client_id,
+        auth_uri, token_uri, auth_provider_x509_cert_url, client_x509_cert_url, universe_domain, spreadsheet_url,
+        spreadsheet_name
+    ]):
+        raise MissingGoogleServiceAccountConfigError
+
+    return GoogleServiceAccountConfig(
+        type=type_,
+        project_id=project_id,
+        private_key_id=private_key_id,
+        private_key=private_key,
+        client_email=client_email,
+        client_id=client_id,
+        auth_uri=auth_uri,
+        token_uri=token_uri,
+        auth_provider_x509_cert_url=auth_provider_x509_cert_url,
+        client_x509_cert_url=client_x509_cert_url,
+        universe_domain=universe_domain,
+        spreadsheet_url=spreadsheet_url,
+        spreadsheet_name=spreadsheet_name
+    )
+
+
 @dataclass(frozen=True)
 class Config:
     database: RedisConfig
     amocrm: AmoCRMConfig
+    google_service_account: GoogleServiceAccountConfig
 
 
 def load_settings() -> Config:
     database = load_redis_config()
     amocrm = load_amocrm_config()
+    google_service_account = load_google_service_account_config()
     return Config(
         database=database,
-        amocrm=amocrm
+        amocrm=amocrm,
+        google_service_account=google_service_account
     )

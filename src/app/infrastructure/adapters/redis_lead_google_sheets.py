@@ -11,14 +11,13 @@ class RedisSheetsLeadGateway(SheetsLeadGateway):
         self.prefix = "google_sheets_"
 
     def set_lead(self, row_id: int, lead_id: int) -> None:
-        self.client.set(self.prefix + str(row_id), str(lead_id))
+        self.client.set(f"{self.prefix}row:{row_id}", lead_id)
+        self.client.set(f"{self.prefix}lead:{lead_id}", row_id)
 
     def get_lead(self, row_id: int) -> int | None:
         value = cast(Any, self.client.get(self.prefix + str(row_id)))
         return int(value) if value is not None else None
 
-    def delete_lead(self, row_id: int) -> None:
-        self.client.delete(self.prefix + str(row_id))
-
-    def exists(self, row_id: int) -> bool:
-        return bool(self.client.exists(self.prefix + str(row_id)))
+    def get_row_by_lead(self, lead_id: int) -> int | None:
+        value = cast(Any, self.client.get(f"{self.prefix}lead:{lead_id}"))
+        return int(value) if value is not None else None

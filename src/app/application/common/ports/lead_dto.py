@@ -13,3 +13,8 @@ class LeadCreate:
 class LeadUpdate:
     email: EmailStr
     amount: int
+
+@dataclass(slots=True)
+class LeadFieldsData:
+    email: str
+    amount: int

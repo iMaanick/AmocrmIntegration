@@ -12,9 +12,5 @@ class SheetsLeadGateway(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def delete_lead(self, row_id: int) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def exists(self, row_id: int) -> bool:
+    def get_row_by_lead(self, lead_id: int) -> int | None:
         raise NotImplementedError
