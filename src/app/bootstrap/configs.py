@@ -2,8 +2,10 @@ from dataclasses import dataclass
 from os import environ
 
 
-@dataclass
 class MissingRedisConfigError(ValueError):
+    def __init__(self) -> None:
+        super().__init__(self.title)
+
     @property
     def title(self) -> str:
         return "Required Redis environment variables are missing"
@@ -39,8 +41,10 @@ def load_redis_config() -> RedisConfig:
     )
 
 
-@dataclass
 class MissingAmoCRMConfigError(ValueError):
+    def __init__(self) -> None:
+        super().__init__(self.title)
+
     @property
     def title(self) -> str:
         return "Required AmoCRM environment variables are missing"
