@@ -20,3 +20,4 @@ __pycache__/
 /data/
 /src/app/bootstrap/ioc/lul.py
 /redis_data/
+/src/app/bootstrap/entrypoints/some.py

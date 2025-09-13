@@ -22,11 +22,10 @@ def upsert_lead(
         use_case: FromDishka[UpsertLeadUseCase],
 ) -> UpsertLeadResponse:
     logger.info(
-        "Upsert lead request received | row=%s email=%s amount=%s comment=%s",
+        "Upsert lead request received | row=%s email=%s amount=%s",
         request_data.row,
         request_data.email,
         request_data.amount,
-        request_data.comment,
     )
     response = use_case(request_data)
     logger.info(

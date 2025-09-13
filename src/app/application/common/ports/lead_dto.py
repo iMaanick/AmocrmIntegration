@@ -8,4 +8,8 @@ class LeadCreate:
     row: int
     email: EmailStr
     amount: int
-    comment: str
+
+@dataclass(slots=True)
+class LeadUpdate:
+    email: EmailStr
+    amount: int
