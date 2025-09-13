@@ -23,7 +23,8 @@ dependencies = [
     "amocrm_api",
     "redis",
     "python-multipart",
-    "gspread"
+    "gspread",
+    "orjson"
 ]
 [project.optional-dependencies]
 dev = [
