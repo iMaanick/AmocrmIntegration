@@ -21,3 +21,4 @@ __pycache__/
 /src/app/bootstrap/ioc/lul.py
 /redis_data/
 /src/app/bootstrap/entrypoints/some.py
+/amo_redis_data/
